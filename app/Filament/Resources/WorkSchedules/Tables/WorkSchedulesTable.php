@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\WorkSchedules\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -9,23 +9,33 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class UsersTable
+class WorkSchedulesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Nama')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email')
-                    ->searchable(),
-                TextColumn::make('roles.name')
-                    ->label('Role')
-                    ->searchable(),
-                TextColumn::make('email_verified_at')
-                    ->dateTime()
+                TextColumn::make('work_day')
+                    ->label('Hari Kerja')
+                      ->formatStateUsing(fn($state) => match ($state) {
+                        'monday' => 'Senin',
+                        'tuesday' => 'Selasa',
+                        'wednesday' => 'Rabu',
+                        'thursday' => 'Kamis',
+                        'friday' => 'Jumat',
+                        'saturday' => 'Sabtu',
+                        'sunday' => 'Minggu',
+                        default => ucfirst($state),
+                    }),
+                TextColumn::make('work_start_time')
+                    ->label('Jam Mulai Kerja')
+                    ->suffix(' WIB')
+                    ->time()
+                    ->sortable(),
+                TextColumn::make('work_end_time')
+                    ->label('Jam Selesai Kerja')
+                    ->time()
+                    ->suffix(' WIB')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()

@@ -8,12 +8,12 @@ class WorkSchedule extends Model
 {
     protected $fillable = [
         'work_day',
-        'check_in_time',
-        'check_out_time'
+        'work_start_time',
+        'work_end_time',
     ];
 
     protected $casts = [
-        'check_in_time' => 'datetime:H:i',
-        'check_out_time' => 'datetime:H:i',
+        'work_start_time' => 'datetime:H:i',
+        'work_end_time' => 'datetime:H:i',
     ];
 }
