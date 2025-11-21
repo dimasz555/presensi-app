@@ -86,6 +86,16 @@ class EmployeesTable
                                     }),
                                 TextEntry::make('position.name')
                                     ->label('Jabatan'),
+                                TextEntry::make('basic_salary')
+                                    ->label('Gaji Pokok')
+                                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.')),
+                                TextEntry::make('status')
+                                    ->label('Status')
+                                    ->formatStateUsing(fn($state) => match ($state) {
+                                        'active' => 'Aktif',
+                                        'inactive' => 'Non-Aktif',
+                                        default => ucfirst($state),
+                                    }),
                                 TextEntry::make('roles')
                                     ->label('Role')
                                     ->formatStateUsing(fn($state, $record) => $record->getRoleNames()->join(', ')),

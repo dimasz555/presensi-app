@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,6 +31,7 @@ class User extends Authenticatable implements HasMedia
         'position_id',
         'gender',
         'basic_salary',
+        'late_penalty_per_minute',
         'phone',
         'face_embedding',
         'face_registered_at',
@@ -38,6 +41,7 @@ class User extends Authenticatable implements HasMedia
     protected $casts = [
         'face_embedding' => 'array',
         'face_registered_at' => 'datetime',
+        'late_penalty_per_minute' => 'integer',
     ];
 
     /**
@@ -61,6 +65,48 @@ class User extends Authenticatable implements HasMedia
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Method untuk hitung total menit terlambat dalam bulan tertentu
+    public function getTotalLateMinutesInMonth(int $month, int $year): int
+    {
+        $attendances = $this->attendances()
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->where('status', 'telat')
+            ->whereNotNull('check_in')
+            ->get();
+
+        $totalLateMinutes = 0;
+
+        foreach ($attendances as $attendance) {
+            $dayOfWeek = strtolower(\Carbon\Carbon::parse($attendance->date)->format('l'));
+
+            $schedule = \App\Models\WorkSchedule::where('work_day', $dayOfWeek)->first();
+
+            if ($schedule) {
+                $dateString = \Carbon\Carbon::parse($attendance->date)->format('Y-m-d');
+                $timeString = \Carbon\Carbon::parse($schedule->work_start_time)->format('H:i:s');
+
+                $scheduledStart = \Carbon\Carbon::parse($dateString . ' ' . $timeString);
+                $actualCheckIn = \Carbon\Carbon::parse($attendance->check_in);
+
+                // Hanya hitung jika terlambat
+                if ($actualCheckIn->gt($scheduledStart)) {
+                    $lateMinutes = abs($scheduledStart->diffInMinutes($actualCheckIn));
+                    $totalLateMinutes += $lateMinutes;
+                }
+            }
+        }
+
+        return $totalLateMinutes;
+    }
+
+    // Method untuk hitung total denda keterlambatan
+    public function getTotalLatePenaltyInMonth(int $month, int $year): int
+    {
+        $totalLateMinutes = $this->getTotalLateMinutesInMonth($month, $year);
+        return abs($totalLateMinutes * ($this->late_penalty_per_minute ?? 0));
     }
 
     public function position()

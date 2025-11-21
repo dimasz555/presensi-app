@@ -16,10 +16,11 @@ class Attendance extends Model implements HasMedia
         'date',
         'check_in',
         'check_out',
+        'status',
         'check_in_lat',
-        'check_in_lng',
+        'check_in_long',
         'check_out_lat',
-        'check_out_lng',
+        'check_out_long',
         'face_matched',
         'face_confidence'
     ];

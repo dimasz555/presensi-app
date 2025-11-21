@@ -32,8 +32,14 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->databaseTransactions()
             ->unsavedChangesAlerts()
+
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationGroups([
+                'Data Master',
+                'Presensi & Payroll',
+                'Pengaturan',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

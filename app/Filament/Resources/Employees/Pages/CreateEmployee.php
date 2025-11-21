@@ -8,4 +8,14 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateEmployee extends CreateRecord
 {
     protected static string $resource = EmployeeResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        $this->record->assignRole('karyawan');
+    }
 }

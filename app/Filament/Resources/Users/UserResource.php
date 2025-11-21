@@ -13,10 +13,14 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Data Master';
 
     protected static ?string $navigationLabel = 'User';
 
@@ -32,6 +36,11 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return UsersTable::configure($table);
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::user() && (Auth::user()->hasRole('super_admin'));
     }
 
     public static function getRelations(): array

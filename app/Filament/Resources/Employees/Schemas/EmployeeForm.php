@@ -17,6 +17,7 @@ class EmployeeForm
                     ->required(),
                 textInput::make('email')
                     ->email()
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 TextInput::make('password')
                     ->password()
@@ -24,7 +25,8 @@ class EmployeeForm
                     ->dehydrated(fn(?string $state): bool => filled($state))
                     ->required(fn(string $operation): bool => $operation === 'create'),
                 textInput::make('phone')
-                    ->label('Nomor Whatsapp')
+                    ->label('Nomor WhatsApp')
+                    ->unique(ignoreRecord: true)
                     ->required(),
                 Select::make('gender')
                     ->label('Jenis Kelamin')
@@ -33,6 +35,21 @@ class EmployeeForm
                         'p' => 'Perempuan',
                     ])
                     ->required(),
+                Select::make('position')
+                    ->label('Jabatan')
+                    ->relationship('position', 'name')
+                    ->required(),
+                TextInput::make('basic_salary')
+                    ->label('Gaji Pokok')
+                    ->numeric()
+                    ->Prefix('Rp ')
+                    ->required(),
+                TextInput::make('late_penalty_per_minute')
+                    ->numeric()
+                    ->label('Denda Keterlambatan per Menit')
+                    ->prefix('Rp')
+                    ->default(0)
+                    ->helperText('Jumlah denda yang dipotong per menit keterlambatan'),
                 Select::make('status')
                     ->label('Jenis Kelamin')
                     ->options([
