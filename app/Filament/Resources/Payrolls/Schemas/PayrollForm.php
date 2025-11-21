@@ -3,12 +3,10 @@
 namespace App\Filament\Resources\Payrolls\Schemas;
 
 use App\Models\User;
-use App\Models\Payroll;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\ViewField;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Hash;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -26,7 +24,7 @@ class PayrollForm
                             ->options(fn() => User::whereHas('roles', fn($q) => $q->where('name', 'karyawan'))->pluck('name', 'id'))
                             ->searchable()
                             ->required()
-                            ->reactive()
+                            ->live()
                             ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                 $user = User::find($state);
                                 if ($user) {
@@ -61,7 +59,7 @@ class PayrollForm
                             ->default((int)date('n'))
                             ->required()
                             ->native(false)
-                            ->reactive()
+                            ->live()
                             ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                 $userId = $get('user_id');
                                 $year = $get('period_year');
@@ -77,7 +75,7 @@ class PayrollForm
                             ->default((int)date('Y'))
                             ->label('Tahun')
                             ->required()
-                            ->reactive()
+                            ->live()
                             ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                 $userId = $get('user_id');
                                 $month = $get('period_month');
@@ -88,7 +86,14 @@ class PayrollForm
                                 }
                             }),
                     ])
-                    ->columns(1),
+                    ->columnSpanFull()
+                    ->columns(3),
+
+                ViewField::make('slip_gaji_info')
+                    ->view('filament.components.slip-gaji-info')
+                    ->visible(fn(Get $get) => $get('user_id') !== null)
+                    ->dehydrated(false)
+                    ->columnSpanFull(),
 
                 Section::make('Informasi Gaji')
                     ->schema([
@@ -124,18 +129,18 @@ class PayrollForm
                             ->readOnly()
                             ->dehydrated(false),
                     ])
-                    ->columns(1),
+                    ->columnSpanFull()
+                    ->columns(2),
 
                 Section::make('Informasi Keterlambatan')
                     ->schema([
                         TextInput::make('late_penalty_per_minute')
                             ->numeric()
-                            ->label('Denda per Menit')
+                            ->label('Denda/Menit')
                             ->prefix('Rp')
                             ->readOnly()
                             ->default(0)
-                            ->dehydrated(false)
-                            ->helperText('Denda keterlambatan per menit (dari data karyawan)'),
+                            ->dehydrated(false),
 
                         TextInput::make('total_late_minutes')
                             ->numeric()
@@ -143,35 +148,32 @@ class PayrollForm
                             ->suffix('menit')
                             ->readOnly()
                             ->default(0)
-                            ->dehydrated(false)
-                            ->helperText('Total menit terlambat di bulan ini'),
+                            ->dehydrated(false),
 
                         TextInput::make('total_late_penalty')
                             ->numeric()
-                            ->label('Total Denda Keterlambatan')
+                            ->label('Total Denda')
                             ->prefix('Rp')
                             ->readOnly()
                             ->default(0)
-                            ->dehydrated(false)
-                            ->helperText('Denda = Total Menit × Denda per Menit'),
+                            ->dehydrated(false),
                     ])
                     ->columns(3)
                     ->collapsible(),
 
-                Section::make('Status Penggajian')
+                Section::make('Status')
                     ->schema([
                         Select::make('status')
                             ->options([
                                 'pending' => 'Pending',
-                                'paid' => 'Selesai',
-                                'rejected' => 'Dibatalkan',
+                                'paid' => 'Sudah Dikirim',
+                                'rejected' => 'Batal',
                             ])
-                            ->label('Status')
+                            ->label('Status Pembayaran')
                             ->default('pending')
                             ->required()
                             ->native(false),
-                    ])
-                    ->columns(1),
+                    ]),
             ]);
     }
 

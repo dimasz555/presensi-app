@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->databaseTransactions()
             ->unsavedChangesAlerts()
-
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Amber,
             ])

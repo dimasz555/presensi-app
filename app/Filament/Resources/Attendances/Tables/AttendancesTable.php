@@ -27,7 +27,7 @@ class AttendancesTable
                     ->label('Nama Karyawan '),
                 TextColumn::make('date')
                     ->label('Tanggal')
-                    ->date()
+                    ->date('l, d M Y')
                     ->sortable(),
                 TextColumn::make('check_in')
                     ->label('Jam Masuk')
@@ -40,7 +40,7 @@ class AttendancesTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->formatStateUsing(fn($state) => match ($state) {
-                        'hadir' => 'Hadir',
+                        'hadir' => 'Tepat Waktu',
                         'telat' => 'Terlambat',
                         'Izin' => 'Izin',
                         'sakit' => 'Sakit',

@@ -9,6 +9,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -59,6 +60,22 @@ class PayrollsTable
                     ->label('Gaji Bersih')
                     ->money('idr', true)
                     ->sortable(),
+                BadgeColumn::make('status')
+                    ->label('Status')
+                    ->formatStateUsing(fn($state) => match (strtolower((string) $state)) {
+                        'pending'  => 'Pending',
+                        'paid'     => 'Sudah Dikirim',
+                        'rejected' => 'Batal',
+                        default    => ucfirst((string) $state),
+                    })
+                    ->colors([
+                        'success'   => fn($state) => strtolower((string) $state) === 'paid',
+                        'danger'    => fn($state) => strtolower((string) $state) === 'rejected',
+                        'warning'   => fn($state) => strtolower((string) $state) === 'pending',
+                        'secondary' => fn($state) => empty($state),
+                    ])
+                    ->sortable(),
+
             ])
             ->filters([
                 TrashedFilter::make(),
