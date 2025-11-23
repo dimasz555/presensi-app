@@ -60,7 +60,7 @@ class PayrollsTable
                     ->label('Gaji Bersih')
                     ->money('idr', true)
                     ->sortable(),
-                BadgeColumn::make('status')
+                TextColumn::make('status')
                     ->label('Status')
                     ->formatStateUsing(fn($state) => match (strtolower((string) $state)) {
                         'pending'  => 'Pending',
@@ -68,6 +68,7 @@ class PayrollsTable
                         'rejected' => 'Batal',
                         default    => ucfirst((string) $state),
                     })
+                    ->badge()
                     ->colors([
                         'success'   => fn($state) => strtolower((string) $state) === 'paid',
                         'danger'    => fn($state) => strtolower((string) $state) === 'rejected',

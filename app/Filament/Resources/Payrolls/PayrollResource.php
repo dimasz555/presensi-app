@@ -22,13 +22,13 @@ class PayrollResource extends Resource
 {
     protected static ?string $model = Payroll::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
 
     protected static string | UnitEnum | null $navigationGroup = 'Presensi & Payroll';
 
-    protected static ?string $recordTitleAttribute = 'Penggajian';
+    protected static ?string $recordTitleAttribute = 'Slip Gaji';
 
-    protected static ?string $modelLabel = 'Penggajian';
+    protected static ?string $modelLabel = 'Slip Gaji';
 
     public static function form(Schema $schema): Schema
     {

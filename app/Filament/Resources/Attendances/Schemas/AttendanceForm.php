@@ -26,10 +26,16 @@ class AttendanceForm
                     ->searchable()
                     ->required(),
                 DatePicker::make('date')
+                    ->label('Tanggal')
                     ->required(),
-                DateTimePicker::make('check_in'),
-                DateTimePicker::make('check_out'),
+                DateTimePicker::make('check_in')
+                    ->label('Waktu Masuk')
+                    ->required(),
+                DateTimePicker::make('check_out')
+                    ->label('Waktu Keluar')
+                    ->required(),
                 Select::make('status')
+                    ->label('Status')
                     ->options([
                         'hadir' => 'Hadir',
                         'telat' => 'Terlambat',
@@ -39,16 +45,22 @@ class AttendanceForm
                     ])
                     ->required(),
                 TextInput::make('check_in_lat')
+                    ->label('Latitude Masuk')
                     ->numeric(),
                 TextInput::make('check_in_long')
+                    ->label('Longitude Masuk')
                     ->numeric(),
                 TextInput::make('check_out_lat')
+                    ->label('Latitude Keluar')
                     ->numeric(),
                 TextInput::make('check_out_long')
+                    ->label('Longitude Keluar')
                     ->numeric(),
                 Toggle::make('face_matched')
+                    ->label('Kecocokan Wajah')
                     ->required(),
                 TextInput::make('face_confidence')
+                    ->label('Tingkat Keyakinan Wajah')
                     ->numeric(),
             ]);
     }

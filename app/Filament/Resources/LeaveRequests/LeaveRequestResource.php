@@ -13,14 +13,19 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class LeaveRequestResource extends Resource
 {
     protected static ?string $model = LeaveRequest::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelopeOpen;
 
-    protected static ?string $recordTitleAttribute = 'Perizinan';
+    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Payroll';
+
+    protected static ?string $navigationLabel = 'Izin / Cuti';
+
+    protected static ?string $modelLabel = 'Izin / Cuti';
 
     public static function form(Schema $schema): Schema
     {

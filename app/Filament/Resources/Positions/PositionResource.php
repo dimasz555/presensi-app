@@ -25,7 +25,7 @@ class PositionResource extends Resource
 
     protected static ?string $modelLabel = 'Jabatan';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
 
     protected static ?string $recordTitleAttribute = 'Jabatan';
 
