@@ -32,7 +32,7 @@ class LeaveRequestForm
                     ->label('Keterangan')
                     ->columnSpanFull(),
                 Select::make('status')
-                    ->options(['pending' => 'Pending', 'approved' => 'Diterima', 'rejected' => 'Ditolak'])
+                    ->options(['pending' => 'Pending', 'approved' => 'Disetujui', 'rejected' => 'Ditolak'])
                     ->default('pending')
                     ->required(),
             ]);

@@ -38,8 +38,8 @@ class LeaveRequestsTable
                     ->label('Status')
                     ->formatStateUsing(fn($state) => match (strtolower((string) $state)) {
                         'pending'  => 'Pending',
-                        'approved'     => 'Diterima',
-                        'rejected' => 'Batal',
+                        'approved'     => 'Disetujui',
+                        'rejected' => 'Ditolak',
                         default    => ucfirst((string) $state),
                     })
                     ->badge()
