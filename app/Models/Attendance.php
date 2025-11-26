@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @mixin IdeHelperAttendance
+ */
 class Attendance extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia;

@@ -48,9 +48,9 @@
                 <h2 class="text-lg font-bold text-custom-gray-100">Status Hari Ini</h2>
                 @if ($todayAttendance)
                     <span
-                        class="bg-success-secondary text-success-main text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
+                        class=" text-success-main text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1">
                         @if ($todayAttendance->face_matched)
-                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
@@ -75,12 +75,12 @@
                                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-success-pressed">Check In</span>
+                        <span class="text-sm font-medium text-success-pressed">Masuk</span>
                     </div>
-                    <p class="text-2xl font-bold text-success-pressed">
+                    <p class="text-2xl font-bold text-custom-gray-100">
                         {{ $todayAttendance?->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->format('H:i') : '--:--' }}
                     </p>
-                    <p class="text-xs text-custom-gray-60 mt-1">
+                    <p class="text-xs text-custom-gray-90 mt-1">
                         {{ $todayAttendance?->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->diffForHumans() : 'Belum check in' }}
                     </p>
                 </div>
@@ -94,12 +94,12 @@
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
                         </div>
-                        <span class="text-xs font-medium text-danger-pressed">Check Out</span>
+                        <span class="text-sm font-medium text-danger-pressed">Keluar</span>
                     </div>
-                    <p class="text-2xl font-bold text-danger-pressed">
+                    <p class="text-2xl font-bold text-custom-gray-100">
                         {{ $todayAttendance?->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->format('H:i') : '--:--' }}
                     </p>
-                    <p class="text-xs text-custom-gray-60 mt-1">
+                    <p class="text-xs text-custom-gray-90 mt-1">
                         {{ $todayAttendance?->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->diffForHumans() : 'Belum check out' }}
                     </p>
                 </div>

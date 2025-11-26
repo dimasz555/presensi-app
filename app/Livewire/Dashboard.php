@@ -10,7 +10,7 @@ use Livewire\Component;
 
 
 #[Layout('layouts.app')]
-#[Title('Dashboard - Sajadadir')]
+#[Title('Presensi - Sajadadir')]
 
 class Dashboard extends Component
 {

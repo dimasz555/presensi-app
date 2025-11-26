@@ -50,7 +50,7 @@ class Login extends Component
             }
 
             session()->regenerate();
-            return redirect()->intended('/beranda');
+            return redirect()->intended('/presensi');
         }
 
         $this->addError('email', 'Email atau password salah.');
