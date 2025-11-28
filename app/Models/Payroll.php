@@ -20,7 +20,8 @@ class Payroll extends Model
         'total_bonus',
         'total_deductions',
         'net_salary',
-        'status'
+        'status',
+        'file_path',
     ];
 
     protected static function booted()
@@ -45,6 +46,43 @@ class Payroll extends Model
         $this->net_salary = $this->basic_salary + $this->total_bonus - $this->total_deductions;
 
         $this->saveQuietly(); // Save tanpa trigger event
+    }
+
+    public function bonuses()
+    {
+        return $this->salaryComponents()->where('type', 'bonus');
+    }
+
+    // Get deduction components only
+    public function deductions()
+    {
+        return $this->salaryComponents()->where('type', 'deduction');
+    }
+
+    // Helper untuk nama bulan
+    public function getMonthNameAttribute()
+    {
+        return match ($this->period_month) {
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+            default => 'Tidak Diketahui',
+        };
+    }
+
+    // Helper untuk periode
+    public function getPeriodLabelAttribute()
+    {
+        return $this->month_name . ' ' . $this->period_year;
     }
 
     public function user()
