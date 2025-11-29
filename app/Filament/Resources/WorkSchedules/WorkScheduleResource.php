@@ -21,7 +21,7 @@ class WorkScheduleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Data Master';
+    protected static string | UnitEnum | null $navigationGroup = 'Pengaturan';
     
     protected static ?string $recordTitleAttribute = 'Jadwal kerja';
 

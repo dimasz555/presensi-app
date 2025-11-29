@@ -125,7 +125,11 @@ class Profile extends Component
 
         $this->loadUserData();
         $this->closeEditModal();
-        session()->flash('success', 'Profil berhasil diperbarui!');
+        $this->dispatch(
+            'show-toast',
+            message: 'Profil berhasil diperbarui!',
+            type: 'success'
+        );
     }
 
     public function openPasswordModal()
@@ -168,7 +172,11 @@ class Profile extends Component
         ]);
 
         $this->closePasswordModal();
-        session()->flash('success', 'Password berhasil diperbarui!');
+        $this->dispatch(
+            'show-toast',
+            message: 'Password berhasil diperbarui!',
+            type: 'success'
+        );
     }
 
     public function openAvatarModal()
@@ -207,7 +215,11 @@ class Profile extends Component
 
         $this->loadUserData();
         $this->closeAvatarModal();
-        session()->flash('success', 'Foto profil berhasil diperbarui!');
+        $this->dispatch(
+            'show-toast',
+            message: 'Foto profil berhasil diperbarui!',
+            type: 'success'
+        );
     }
 
     public function deleteAvatar()
@@ -217,7 +229,11 @@ class Profile extends Component
 
         $this->loadUserData();
         $this->closeAvatarModal();
-        session()->flash('success', 'Foto profil berhasil dihapus!');
+        $this->dispatch(
+            'show-toast',
+            message: 'Foto profil berhasil dihapus!',
+            type: 'success'
+        );
     }
 
     public function logout()

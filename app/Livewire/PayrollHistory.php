@@ -66,7 +66,11 @@ class PayrollHistory extends Component
             return;
         }
 
-        session()->flash('error', 'PDF tidak ditemukan');
+        $this->dispatch(
+            'show-toast',
+            message: 'File tidak ditemukan!',
+            type: 'error'
+        );
     }
 
     public function render()

@@ -116,7 +116,11 @@ class LeaveRequest extends Component
         $this->loadStats();
         $this->closeModal();
 
-        session()->flash('success', 'Pengajuan berhasil dikirim!');
+        $this->dispatch(
+            'show-toast',
+            message: 'Pengajuan berhasil dikirim!',
+            type: 'success'
+        );
     }
 
     private function getStatusLabel($status)

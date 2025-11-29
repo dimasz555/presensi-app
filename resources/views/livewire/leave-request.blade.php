@@ -12,19 +12,6 @@
     </div>
 
     <div class="px-6 -mt-4">
-        <!-- Success Message -->
-        @if (session()->has('success'))
-            <div class="bg-success-secondary border border-success-main rounded-xl p-4 mb-4 flex items-center gap-3"
-                x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-                <svg class="w-6 h-6 text-success-main flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd" />
-                </svg>
-                <p class="text-success-pressed font-medium">{{ session('success') }}</p>
-            </div>
-        @endif
-
         <!-- Stats Cards -->
         <div class="grid grid-cols-3 gap-3 mb-6">
             <div class="bg-white rounded-xl p-4 text-center shadow-sm">
@@ -221,3 +208,16 @@
     @endif
     @include('components.bottom-nav')
 </div>
+
+@script
+    <script>
+        $wire.on('show-toast', (event) => {
+            if (typeof showToast === 'function') {
+                showToast(event.message, event.type);
+            } else {
+                console.error('showToast not found!');
+                alert(event.message); // Fallback
+            }
+        });
+    </script>
+@endscript

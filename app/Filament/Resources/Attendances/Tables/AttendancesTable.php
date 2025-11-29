@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Attendances\Tables;
 
+use App\Models\User;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -10,10 +11,15 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -50,6 +56,10 @@ class AttendancesTable
                 IconColumn::make('face_matched')
                     ->label('Verifikasi Wajah')
                     ->boolean(),
+                IconColumn::make('check_in_lat')
+                    ->label('Verifikasi Lokasi')
+                    ->boolean()
+                    ->getStateUsing(fn($record) => $record->check_in_lat && $record->check_in_long ? true : false),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -64,8 +74,41 @@ class AttendancesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Filter::make('start_date')
+                    ->label('Tanggal Mulai')
+                    ->form([
+                        DatePicker::make('start_date')
+                            ->label('Tanggal Mulai'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when(
+                                $data['start_date'] ?? null,
+                                fn($q, $date) =>
+                                $q->whereDate('date', '>=', $date)
+                            );
+                    }),
+
+                Filter::make('end_date')
+                    ->label('Tanggal Selesai')
+                    ->form([
+                        DatePicker::make('end_date')
+                            ->label('Tanggal Selesai')
+                            ->afterOrEqual('start_date')
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when(
+                                $data['end_date'] ?? null,
+                                fn($q, $date) =>
+                                $q->whereDate('date', '<=', $date)
+                            );
+                    }),
+                SelectFilter::make('user_id')
+                    ->label('Karyawan')
+                    ->options(fn() => User::WhereHas('roles', fn($q) => $q->where('name', 'karyawan'))->pluck('name', 'id')),
                 TrashedFilter::make(),
-            ])
+            ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

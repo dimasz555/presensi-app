@@ -1,1 +1,0 @@
-@include('components.bottom-nav')

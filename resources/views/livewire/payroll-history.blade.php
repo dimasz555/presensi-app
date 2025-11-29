@@ -12,18 +12,6 @@
     </div>
 
     <div class="px-6 -mt-4">
-        @if (session()->has('error'))
-            <div class="bg-danger-secondary border border-danger-main rounded-xl p-4 mb-4 flex items-center gap-3"
-                x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-                <svg class="w-6 h-6 text-danger-main flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clip-rule="evenodd" />
-                </svg>
-                <p class="text-danger-pressed font-medium">{{ session('error') }}</p>
-            </div>
-        @endif
-
         <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
             <label class="block text-sm font-medium text-custom-gray-90 mb-2">Tahun</label>
             <select wire:model.live="selectedYear"
@@ -52,27 +40,31 @@
                         <div class="space-y-2 mb-4">
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-custom-gray-60">Gaji Pokok</span>
-                                <span class="font-semibold text-custom-gray-100">Rp{{ number_format($payroll->basic_salary, 0, ',', '.') }}</span>
+                                <span
+                                    class="font-semibold text-custom-gray-100">Rp{{ number_format($payroll->basic_salary, 0, ',', '.') }}</span>
                             </div>
 
                             @if ($payroll->total_bonus > 0)
                                 <div class="flex justify-between items-center text-sm">
                                     <span class="text-success-main">+ Bonus</span>
-                                    <span class="font-semibold text-success-main">Rp{{ number_format($payroll->total_bonus, 0, ',', '.') }}</span>
+                                    <span
+                                        class="font-semibold text-success-main">Rp{{ number_format($payroll->total_bonus, 0, ',', '.') }}</span>
                                 </div>
                             @endif
 
                             @if ($payroll->total_deductions > 0)
                                 <div class="flex justify-between items-center text-sm">
                                     <span class="text-danger-main">- Potongan</span>
-                                    <span class="font-semibold text-danger-main">Rp{{ number_format($payroll->total_deductions, 0, ',', '.') }}</span>
+                                    <span
+                                        class="font-semibold text-danger-main">Rp{{ number_format($payroll->total_deductions, 0, ',', '.') }}</span>
                                 </div>
                             @endif
 
                             <div class="pt-3 border-t border-custom-gray-30">
                                 <div class="flex justify-between items-center">
                                     <span class="font-bold text-custom-gray-100">Gaji Bersih</span>
-                                    <span class="font-bold text-lg text-primary">Rp{{ number_format($payroll->net_salary, 0, ',', '.') }}</span>
+                                    <span
+                                        class="font-bold text-lg text-primary">Rp{{ number_format($payroll->net_salary, 0, ',', '.') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -124,3 +116,16 @@
     <!-- Bottom Navigation -->
     @include('components.bottom-nav')
 </div>
+
+@script
+    <script>
+        $wire.on('show-toast', (event) => {
+            if (typeof showToast === 'function') {
+                showToast(event.message, event.type);
+            } else {
+                console.error('showToast not found!');
+                alert(event.message); // Fallback
+            }
+        });
+    </script>
+@endscript

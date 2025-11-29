@@ -11,17 +11,6 @@
     </div>
 
     <div class="px-6 -mt-12">
-        @if (session()->has('success'))
-            <div class="bg-success-secondary border border-success-main rounded-xl p-4 mb-4 flex items-center gap-3"
-                x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-                <svg class="w-6 h-6 text-success-main flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd" />
-                </svg>
-                <p class="text-success-pressed font-medium">{{ session('success') }}</p>
-            </div>
-        @endif
 
         <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
             <div class="flex flex-col items-center">
@@ -122,6 +111,29 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
+
+            @if (!auth()->user()->face_embedding)
+                <a href="/daftar-wajah" wire:navigate
+                    class="w-full bg-white rounded-xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-info-focus rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-custom-gray-100">Daftar Wajah</p>
+                            <p class="text-xs text-custom-gray-60">Untuk verifikasi presensi</p>
+                        </div>
+                    </div>
+                    <span
+                        class="bg-danger-secondary text-danger-main text-xs font-semibold px-2 py-1 rounded-full">Wajib</span>
+                </a>
+            @endif
         </div>
 
         <button wire:click="logout"
@@ -438,3 +450,16 @@
     @endif
     @include('components.bottom-nav')
 </div>
+
+@script
+    <script>
+        $wire.on('show-toast', (event) => {
+            if (typeof showToast === 'function') {
+                showToast(event.message, event.type);
+            } else {
+                console.error('showToast not found!');
+                alert(event.message); // Fallback
+            }
+        });
+    </script>
+@endscript
