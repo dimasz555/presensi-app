@@ -68,7 +68,7 @@
                     <button @click="autoValidateAndOpen('checkin')" :disabled="isGettingLocation"
                         class="w-full bg-gradient-to-r from-success-main to-green-600 text-white font-semibold py-4 rounded-xl shadow-lg disabled:opacity-50">
                         <span x-show="!isGettingLocation" class="flex items-center justify-center gap-2">
-                            <span>✓</span> Absen Masuk (Face ID)
+                            Absen Masuk Menggunakan Face ID
                         </span>
                         <span x-show="isGettingLocation" class="flex items-center justify-center gap-2">
                             <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@
 
                     <button @click="manualCheckIn()" :disabled="isGettingLocation"
                         class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 rounded-xl shadow disabled:opacity-50">
-                        <span x-show="!isGettingLocation">📍 Absen Manual (Lokasi Saja)</span>
+                        <span x-show="!isGettingLocation">Absen Menggunakan Verifikasi Lokasi</span>
                         <span x-show="isGettingLocation">Memproses...</span>
                     </button>
                 </div>

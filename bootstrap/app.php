@@ -15,6 +15,17 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
     })
+    ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('attendance:auto-checkout')
+            ->dailyAt('00:30')
+            ->timezone('Asia/Jakarta')
+            ->onSuccess(function () {
+                \Log::info('Auto checkout completed successfully');
+            })
+            ->onFailure(function () {
+                \Log::error('Auto checkout failed');
+            });
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

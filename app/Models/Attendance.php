@@ -25,7 +25,8 @@ class Attendance extends Model implements HasMedia
         'check_out_lat',
         'check_out_long',
         'face_matched',
-        'face_confidence'
+        'face_confidence',
+        'auto_checkout'
     ];
 
     protected $casts = [
@@ -34,7 +35,17 @@ class Attendance extends Model implements HasMedia
         'check_out' => 'datetime',
         'face_matched' => 'boolean',
         'face_confidence' => 'float',
+        'auto_checkout' => 'boolean',
     ];
+
+    public function getCheckoutTypeAttribute()
+    {
+        if (!$this->check_out) {
+            return 'Belum Checkout';
+        }
+
+        return $this->auto_checkout ? 'Auto Checkout' : 'Manual Checkout';
+    }
 
     public function user()
     {
