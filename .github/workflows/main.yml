@@ -12,6 +12,10 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
 
+    # Install Composer dependencies
+    - name: 📦 Install Composer dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist
+
     # Setup Node.js environment
     - name: 🔧 Setup Node.js
       uses: actions/setup-node@v4
@@ -19,8 +23,8 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
-    # Install dependencies
-    - name: 📦 Install dependencies
+    # Install npm dependencies
+    - name: 📦 Install npm dependencies
       run: npm ci
     
     # Build the project
