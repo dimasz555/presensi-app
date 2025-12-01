@@ -125,7 +125,7 @@ class Dashboard extends Component
         // Check if user has registered face
         $user = auth()->user();
         if (!$user->face_embedding) {
-            $this->message = 'Anda belum mendaftarkan wajah. Silakan daftarkan wajah di menu Profil terlebih dahulu.';
+            $this->message = 'Anda belum mendaftarkan wajah. Silakan daftarkan wajah di menu <a href="/profil" wire:navigate class="font-bold underline hover:text-custom-gray-90">Profil</a> terlebih dahulu.';
             $this->messageType = 'warning';
             $this->canCheckIn = false;
             $this->canCheckOut = false;
