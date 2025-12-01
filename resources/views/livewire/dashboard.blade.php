@@ -25,6 +25,15 @@
 
     <!-- Main content -->
     <div class="px-6 -mt-16">
+        @if ($message)
+            <div
+                class="p-4 rounded-xl mb-4 flex items-start gap-3 {{ $messageType === 'error' ? 'bg-danger-secondary border border-danger-main' : ($messageType === 'warning' ? 'bg-warning-secondary border border-warning-main' : 'bg-info-focus border border-secondary') }}">
+                <p
+                    class="text-sm font-medium {{ $messageType === 'error' ? 'text-danger-pressed' : ($messageType === 'warning' ? 'text-warning-pressed' : 'text-secondary') }}">
+                    {!! $message !!}
+                </p>
+            </div>
+        @endif
         <!-- Status card -->
         <div class="bg-white rounded-2xl shadow-lg p-5 mb-6">
             <div class="flex items-center justify-between mb-4">
