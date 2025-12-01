@@ -4,3 +4,47 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+
+@theme {
+  /* Colors - gunakan format --color-* untuk nama color */
+  --color-primary: #D81D76;
+  --color-secondary: #AE1679;
+  --color-custom-gray: #424242;
+  --color-custom-gray-10: #FFFFFF;
+  --color-custom-gray-20: #F5F5F5;
+  --color-custom-gray-30: #EDEDED;
+  --color-custom-gray-40: #E0E0E0;
+  --color-custom-gray-50: #C2C2C2;
+  --color-custom-gray-60: #9E9E9E;
+  --color-custom-gray-70: #757575;
+  --color-custom-gray-80: #616161;
+  --color-custom-gray-90: #424242;
+  --color-custom-gray-100: #0A0A0A;
+  --color-green-primary: #439F21;
+  --color-green-secondary: #327719;
+  --color-danger-main: #B00020;
+  --color-primary-border: #F3BBD6;
+  --color-primary-secondary: #FBE8F1;
+  --color-secondary-border: #CCEEBF;
+  --color-warning-main: #F4DE1A;
+  --color-warning-secondary: #FDF8D1;
+  --color-warning-pressed: #928510;
+  --color-danger-secondary: #F7C3CD;
+  --color-danger-pressed: #8D001A;
+  --color-danger-focus: #FFD9E0;
+  --color-success-main: #1C7D44;
+  --color-success-secondary: #EAFAF1;
+  --color-success-pressed: #1C7D44;
+  --color-success-focus: #D5F6E3;
+  --color-info-focus: #CCD3F8;
+
+  /* Font Family */
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Custom base styles */
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}
