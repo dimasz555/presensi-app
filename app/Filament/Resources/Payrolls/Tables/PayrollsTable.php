@@ -131,22 +131,13 @@ class PayrollsTable
                     ->modalSubmitActionLabel('Ya, Terima')
                     ->action(function ($record) {
                         try {
-                            // Generate PDF
                             $pdfService = new PayrollPdfService();
                             $pdfPath = $pdfService->generatePdf($record);
 
-                            // DEBUG: Cek apakah $pdfPath ada
-                            \Log::info('PDF Path generated: ' . $pdfPath);
-
-                            // Update status dan simpan path PDF
                             $updated = $record->update([
                                 'status' => 'paid',
-                                'file_path' => $pdfPath, // ← Pastikan ini 'file_path' bukan 'pdf_path'
+                                'file_path' => $pdfPath,
                             ]);
-
-                            // DEBUG: Cek apakah update berhasil
-                            \Log::info('Update result: ' . ($updated ? 'success' : 'failed'));
-                            \Log::info('File path after update: ' . $record->fresh()->file_path);
 
                             Notification::make()
                                 ->success()
@@ -154,10 +145,6 @@ class PayrollsTable
                                 ->body('Slip gaji berhasil dibuat dan dikirim.')
                                 ->send();
                         } catch (\Exception $e) {
-                            // DEBUG: Tampilkan error
-                            \Log::error('Error generating PDF: ' . $e->getMessage());
-                            \Log::error($e->getTraceAsString());
-
                             Notification::make()
                                 ->danger()
                                 ->title('Gagal Mengirim Slip Gaji')
@@ -215,6 +202,7 @@ class PayrollsTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('period_month', direction: 'desc');
     }
 }

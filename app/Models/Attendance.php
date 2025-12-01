@@ -47,6 +47,44 @@ class Attendance extends Model implements HasMedia
         return $this->auto_checkout ? 'Auto Checkout' : 'Manual Checkout';
     }
 
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            'hadir' => 'Tepat Waktu',
+            'telat' => 'Terlambat',
+            'izin' => 'Izin',
+            'sakit' => 'Sakit',
+            'alpha' => 'Alpha',
+            default => 'Unknown',
+        };
+    }
+
+    // Tambahkan accessor untuk color
+    public function getStatusColorAttribute()
+    {
+        return match ($this->status) {
+            'hadir' => 'bg-success-secondary text-success-main',
+            'telat' => 'bg-warning-secondary text-warning-pressed',
+            'izin' => 'bg-info-focus text-secondary',
+            'sakit' => 'bg-warning-secondary text-warning-pressed',
+            'alpha' => 'bg-danger-secondary text-danger-main',
+            default => 'bg-custom-gray-30 text-custom-gray-60',
+        };
+    }
+
+    public function getFilamentStatusColorAttribute()
+    {
+        return match ($this->status) {
+            'hadir' => 'success',
+            'telat' => 'warning',
+            'izin' => 'info',
+            'sakit' => 'warning',
+            'alpha' => 'danger',
+            default => 'gray',
+        };
+    }
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -89,9 +89,9 @@ class Dashboard extends Component
             ->map(function ($attendance) {
                 $type = 'Absensi';
                 if ($attendance->check_in && !$attendance->check_out) {
-                    $type = 'Check In';
+                    $type = 'Absen Masuk';
                 } elseif ($attendance->check_out) {
-                    $type = 'Check Out';
+                    $type = 'Absen Keluar';
                 }
 
                 return (object) [

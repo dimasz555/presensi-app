@@ -24,7 +24,7 @@ class PayrollResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Payroll';
+    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Slip Gaji';
 
     protected static ?string $recordTitleAttribute = 'Slip Gaji';
 

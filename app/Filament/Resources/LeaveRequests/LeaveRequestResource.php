@@ -21,7 +21,7 @@ class LeaveRequestResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelopeOpen;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Payroll';
+    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Slip Gaji';
 
     protected static ?string $navigationLabel = 'Izin / Cuti';
 
