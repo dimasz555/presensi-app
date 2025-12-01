@@ -23,7 +23,7 @@ class AttendanceResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Payroll';
+    protected static string | UnitEnum | null $navigationGroup = 'Presensi & Slip Gaji';
 
     protected static ?string $navigationLabel = 'Presensi';
 
@@ -66,6 +66,7 @@ class AttendanceResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->orderBy('date', 'desc');
+            ->orderBy('date', 'desc')
+            ->orderBy('check_in', 'desc');
     }
 }

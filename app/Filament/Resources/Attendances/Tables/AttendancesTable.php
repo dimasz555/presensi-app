@@ -45,14 +45,9 @@ class AttendancesTable
                     ->time(),
                 TextColumn::make('status')
                     ->label('Status')
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'hadir' => 'Tepat Waktu',
-                        'telat' => 'Terlambat',
-                        'Izin' => 'Izin',
-                        'sakit' => 'Sakit',
-                        'alpha' => 'Alpha',
-                        default => ucfirst($state),
-                    }),
+                    ->badge()
+                    ->formatStateUsing(fn($record) => $record->status_label)
+                    ->color(fn($record) => $record->filament_status_color),
                 IconColumn::make('face_matched')
                     ->label('Verifikasi Wajah')
                     ->boolean(),
