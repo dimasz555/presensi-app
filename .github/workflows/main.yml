@@ -14,7 +14,7 @@ jobs:
 
     # Install Composer dependencies
     - name: 📦 Install Composer dependencies
-      run: composer install --no-progress --no-suggest --prefer-dist
+      run: composer install --optimize-autoloader --no-dev --no-progress --no-interaction --prefer-dist
 
     # Setup Node.js environment
     - name: 🔧 Setup Node.js
