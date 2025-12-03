@@ -24,6 +24,15 @@ class Payroll extends Model
         'file_path',
     ];
 
+    protected $casts = [
+        'period_month' => 'integer',
+        'period_year' => 'integer',
+        'basic_salary' => 'integer',
+        'total_bonus' => 'integer',
+        'total_deductions' => 'integer',
+        'net_salary' => 'integer',
+    ];
+
     protected static function booted()
     {
         // Hitung net_salary saat create (tanpa bonus/deduction dulu)
