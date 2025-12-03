@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Log;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,14 +18,19 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
         $schedule->command('attendance:auto-checkout')
-            ->dailyAt('00:30')
+            ->dailyAt('00:27')
             ->timezone('Asia/Jakarta')
             ->onSuccess(function () {
-                \Log::info('Auto checkout completed successfully');
+                Log::info('Auto checkout completed successfully');
             })
             ->onFailure(function () {
-                \Log::error('Auto checkout failed');
+                Log::error('Auto checkout failed');
             });
+        $schedule->command('attendance:generate-absent')
+            ->dailyAt('01:36')
+            ->timezone('Asia/Jakarta')
+            ->onSuccess(fn() => Log::info('Generate absent completed'))
+            ->onFailure(fn() => Log::error('Generate absent failed'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
