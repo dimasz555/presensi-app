@@ -27,6 +27,7 @@ class Dashboard extends Component
     // Attendance properties
     public $canCheckIn = false;
     public $canCheckOut = false;
+    public $hasFaceRegistered = false;
     public $useManualCheckIn = false;
     public $currentLocation;
     public $userLatitude;
@@ -46,6 +47,8 @@ class Dashboard extends Component
 
         $this->userName = auth()->user()->name;
         $this->userPosition = auth()->user()->position?->name ?? 'Staff';
+
+        $this->hasFaceRegistered = auth()->user()->face_embedding !== null;
 
         $this->loadTodayAttendance();
         $this->loadMonthStats();
@@ -94,6 +97,8 @@ class Dashboard extends Component
                     $type = 'Absen Keluar';
                 }
 
+                $hasCheckInOut = $attendance->check_in || $attendance->check_out;
+
                 return (object) [
                     'type' => $type,
                     'date' => $attendance->date,
@@ -102,6 +107,7 @@ class Dashboard extends Component
                     'status' => $attendance->status_label,
                     'status_class' => $attendance->status_color,
                     'face_matched' => $attendance->face_matched,
+                    'has_check_in_out' => $hasCheckInOut,
                 ];
             });
     }
@@ -120,16 +126,9 @@ class Dashboard extends Component
             return;
         }
 
-
-
-        // Check if user has registered face
-        $user = auth()->user();
-        if (!$user->face_embedding) {
-            $this->message = 'Anda belum mendaftarkan wajah. Silakan daftarkan wajah di menu <a href="/profil" wire:navigate class="font-bold underline hover:text-custom-gray-90">Profil</a> terlebih dahulu.';
-            $this->messageType = 'warning';
-            $this->canCheckIn = false;
-            $this->canCheckOut = false;
-            return;
+        if (!$this->hasFaceRegistered) {
+            $this->message = 'Anda belum mendaftarkan wajah. Anda tetap bisa melakukan absensi dengan verifikasi lokasi. Untuk keamanan lebih baik, silakan daftarkan wajah di menu <a href="/profil" wire:navigate class="font-bold underline hover:text-custom-gray-90">Profil</a>.';
+            $this->messageType = 'info'; //
         }
 
         // Check if user has approved leave
@@ -216,7 +215,7 @@ class Dashboard extends Component
     {
         try {
             if (!$this->canCheckIn) {
-                throw new \Exception('Anda tidak dapat melakukan check-in saat ini.');
+                throw new \Exception('Anda tidak dapat melakukan absen masuk saat ini.');
             }
 
             if (!$this->locationValid) {
@@ -224,7 +223,10 @@ class Dashboard extends Component
             }
 
             // Verify face
-            $confidence = $this->verifyFaceMatch($faceDescriptor);
+            $confidence = null;
+            if ($this->hasFaceRegistered) {
+                $confidence = $this->verifyFaceMatch($faceDescriptor);
+            }
 
             // Determine status
             $now = Carbon::now();
@@ -238,7 +240,7 @@ class Dashboard extends Component
                 'status' => $status,
                 'check_in_lat' => $this->userLatitude,
                 'check_in_long' => $this->userLongitude,
-                'face_matched' => true,
+                'face_matched' => $this->hasFaceRegistered,
                 'face_confidence' => $confidence,
             ]);
 
@@ -254,7 +256,7 @@ class Dashboard extends Component
 
             return [
                 'success' => true,
-                'message' => 'Check-in berhasil! Status: ' . ($status === 'hadir' ? 'Tepat Waktu' : 'Terlambat'),
+                'message' => 'Absen Masuk berhasil! Status: ' . ($status === 'hadir' ? 'Tepat Waktu' : 'Terlambat'),
             ];
         } catch (\Exception $e) {
             $this->isProcessing = false;
@@ -275,7 +277,7 @@ class Dashboard extends Component
     {
         try {
             if (!$this->canCheckIn) {
-                throw new \Exception('Anda tidak dapat melakukan check-in saat ini.');
+                throw new \Exception('Anda tidak dapat melakukan absen masuk saat ini.');
             }
 
             if (!$this->currentLocation) {
@@ -318,7 +320,7 @@ class Dashboard extends Component
             // Set success dengan delay untuk tampilkan notifikasi
             return [
                 'success' => true,
-                'message' => 'Check-in manual berhasil! Status: ' . ($status === 'hadir' ? 'Tepat Waktu' : 'Terlambat'),
+                'message' => 'absen masuk berhasil! Status: ' . ($status === 'hadir' ? 'Tepat Waktu' : 'Terlambat'),
             ];
         } catch (\Exception $e) {
             Log::error('Manual check-in error', [
@@ -382,7 +384,7 @@ class Dashboard extends Component
     {
         try {
             if (!$this->canCheckOut) {
-                throw new \Exception('Anda tidak dapat melakukan check-out saat ini.');
+                throw new \Exception('Anda tidak dapat melakukan absen keluar saat ini.');
             }
 
             if (!$this->currentLocation) {
@@ -418,7 +420,7 @@ class Dashboard extends Component
 
             return [
                 'success' => true,
-                'message' => 'Check-out berhasil!',
+                'message' => 'Absen keluar berhasil!',
             ];
         } catch (\Exception $e) {
             Log::error('Quick check-out error', [

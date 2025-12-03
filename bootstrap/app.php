@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
         $schedule->command('attendance:auto-checkout')
-            ->dailyAt('00:27')
+            ->dailyAt('00:36')
             ->timezone('Asia/Jakarta')
             ->onSuccess(function () {
                 Log::info('Auto checkout completed successfully');

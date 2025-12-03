@@ -59,7 +59,7 @@
                         {{ $todayAttendance?->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->format('H:i') : '--:--' }}
                     </p>
                     <p class="text-xs text-custom-gray-90 mt-1">
-                        {{ $todayAttendance?->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->diffForHumans() : 'Belum check in' }}
+                        {{ $todayAttendance?->check_in ? \Carbon\Carbon::parse($todayAttendance->check_in)->diffForHumans() : 'Belum Absen Masuk' }}
                     </p>
                 </div>
                 <div class="bg-danger-secondary rounded-xl p-4">
@@ -67,47 +67,66 @@
                         {{ $todayAttendance?->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->format('H:i') : '--:--' }}
                     </p>
                     <p class="text-xs text-custom-gray-90 mt-1">
-                        {{ $todayAttendance?->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->diffForHumans() : 'Belum check out' }}
+                        {{ $todayAttendance?->check_out ? \Carbon\Carbon::parse($todayAttendance->check_out)->diffForHumans() : 'Belum Absen Keluar' }}
                     </p>
                 </div>
             </div>
 
             @if ($canCheckIn)
                 <div class="space-y-3">
-                    <button @click="autoValidateAndOpen('checkin')" :disabled="isGettingLocation"
-                        class="w-full bg-gradient-to-r from-success-main to-green-600 text-white font-semibold py-4 rounded-xl shadow-lg disabled:opacity-50">
-                        <span x-show="!isGettingLocation" class="flex items-center justify-center gap-2">
-                            Absen Masuk Menggunakan Face ID
-                        </span>
-                        <span x-show="isGettingLocation" class="flex items-center justify-center gap-2">
-                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            Mendapatkan Lokasi...
-                        </span>
-                    </button>
+                    @if ($hasFaceRegistered)
+                        <button @click="autoValidateAndOpen('checkin')" :disabled="isGettingLocation"
+                            class="w-full bg-gradient-to-r from-success-main to-green-600 text-white font-semibold py-4 rounded-xl shadow-lg disabled:opacity-50">
+                            <span x-show="!isGettingLocation" class="flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                                </svg>
+                                Absen Masuk (Face ID)
+                            </span>
+                            <span x-show="isGettingLocation" class="flex items-center justify-center gap-2">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                Mendapatkan Lokasi...
+                            </span>
+                        </button>
+                    @endif
 
                     <button @click="manualCheckIn()" :disabled="isGettingLocation"
-                        class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 rounded-xl shadow disabled:opacity-50">
-                        <span x-show="!isGettingLocation">Absen Menggunakan Verifikasi Lokasi</span>
+                        class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-{{ $hasFaceRegistered ? '3' : '4' }} rounded-xl shadow disabled:opacity-50">
+                        <span x-show="!isGettingLocation" class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Absen Masuk (Lokasi)
+                        </span>
                         <span x-show="isGettingLocation">Memproses...</span>
                     </button>
                 </div>
             @elseif ($canCheckOut)
                 <button @click="quickCheckOut()" :disabled="isGettingLocation"
                     class="w-full bg-gradient-to-r from-danger-main to-red-600 text-white font-semibold py-4 rounded-xl shadow-lg disabled:opacity-50">
-                    <span x-show="!isGettingLocation">Absen Keluar</span>
+                    <span x-show="!isGettingLocation" class="flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Absen Keluar
+                    </span>
                     <span x-show="isGettingLocation">Memproses...</span>
                 </button>
             @endif
         </div>
 
-        <!-- Camera Modal -->
         @if ($showCamera)
             <div class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" x-data="cameraApp()"
                 x-init="init()">
@@ -133,14 +152,12 @@
                                 </span>
                             </div>
 
-                            <!-- Loading overlay -->
                             <div x-show="!modelsLoaded || !cameraReady"
                                 class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
                                 <p class="text-white text-sm" x-text="loadingMessage"></p>
                             </div>
 
-                            <!-- Processing overlay -->
                             <div x-show="isProcessing"
                                 class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-3">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
@@ -172,7 +189,7 @@
         <!-- Stats -->
         <div class="bg-white rounded-2xl shadow-lg p-5 mb-6">
             <h2 class="text-lg font-bold text-custom-gray-100 mb-4">Statistik Bulan Ini</h2>
-            <div class="grid grid-cols-5 gap-3">
+            <div class="grid grid-cols-4 gap-3">
                 <div class="text-center">
                     <p class="text-xl font-bold text-custom-gray-100">{{ $monthStats['hadir'] }}</p>
                     <p class="text-xs text-custom-gray-60">Hadir</p>
@@ -184,10 +201,6 @@
                 <div class="text-center">
                     <p class="text-xl font-bold text-custom-gray-100">{{ $monthStats['izin'] }}</p>
                     <p class="text-xs text-custom-gray-60">Izin</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-xl font-bold text-custom-gray-100">{{ $monthStats['sakit'] }}</p>
-                    <p class="text-xs text-custom-gray-60">Sakit</p>
                 </div>
                 <div class="text-center">
                     <p class="text-xl font-bold text-custom-gray-100">{{ $monthStats['alpha'] }}</p>
@@ -205,8 +218,12 @@
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-custom-gray-100">
                                 {{ $activity->type }}
-                                @if ($activity->face_matched)
-                                    <span class="text-success-main text-xs">✓ Face ID</span>
+                                @if ($activity->has_check_in_out)
+                                    @if ($activity->face_matched)
+                                        <span class="text-success-main text-xs">(Face ID)</span>
+                                    @else
+                                        <span class="text-blue-500 text-xs">(Lokasi)</span>
+                                    @endif
                                 @endif
                             </p>
                             <p class="text-xs text-custom-gray-60">

@@ -26,10 +26,15 @@ class PayrollPdfService
         $pdf->setPaper('a5', 'landscape');
 
         // Nama file
-        $fileName = 'slip-gaji-' . $payroll->user->name . '-' . $payroll->period_month . '-' . $payroll->period_year . '.pdf';
+        $timestamp = now()->format('YmdHis');
+        $fileName = 'slip-gaji-' . $payroll->user->name . '-' . $payroll->period_month . '-' . $payroll->period_year . '-' . $timestamp . '.pdf';
         $fileName = str_replace(' ', '-', strtolower($fileName));
 
         $path = 'payroll-slips/' . $payroll->period_year . '/' . $payroll->period_month;
+
+        if (!empty($payroll->file_path)) {
+            Storage::disk('public')->delete($payroll->file_path);
+        }
 
         Storage::disk('public')->put($path . '/' . $fileName, $pdf->output());
 
