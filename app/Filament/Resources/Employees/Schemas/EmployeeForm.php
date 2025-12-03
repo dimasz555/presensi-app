@@ -14,6 +14,7 @@ class EmployeeForm
         return $schema
             ->components([
                 textInput::make('name')
+                    ->label('Nama')
                     ->required(),
                 textInput::make('email')
                     ->email()
@@ -51,7 +52,7 @@ class EmployeeForm
                     ->default(0)
                     ->helperText('Jumlah denda yang dipotong per menit keterlambatan'),
                 Select::make('status')
-                    ->label('Jenis Kelamin')
+                    ->label('Status')
                     ->options([
                         'active' => 'Aktif',
                         'inactive' => 'Non-Aktif',

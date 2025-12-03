@@ -13,7 +13,6 @@
         'hadir' => 0,
         'telat' => 0,
         'izin' => 0,
-        'sakit' => 0,
         'alpha' => 0,
     ];
     $totalWorkDays = 0;
@@ -28,7 +27,6 @@
             'hadir' => $attendances->where('status', 'hadir')->count(),
             'telat' => $attendances->where('status', 'telat')->count(),
             'izin' => $attendances->where('status', 'izin')->count(),
-            'sakit' => $attendances->where('status', 'sakit')->count(),
             'alpha' => $attendances->where('status', 'alpha')->count(),
         ];
 
@@ -170,13 +168,6 @@
                         <span class="text-gray-500 dark:text-gray-400 w-32">Izin</span>
                         <span class="text-gray-400 dark:text-gray-500 mr-2">:</span>
                         <span class="font-medium text-blue-600 dark:text-blue-400">{{ $attendanceData['izin'] }}</span>
-                    </div>
-
-                    <div class="flex">
-                        <span class="text-gray-500 dark:text-gray-400 w-32">Sakit</span>
-                        <span class="text-gray-400 dark:text-gray-500 mr-2">:</span>
-                        <span
-                            class="font-medium text-purple-600 dark:text-purple-400">{{ $attendanceData['sakit'] }}</span>
                     </div>
 
                     <div class="flex">
